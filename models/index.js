@@ -3,7 +3,11 @@ const { Schema } = require('mongoose')
 
 const DB = process.env.DB_NAME || 'fe-test'
 
-mongoose.connect(`mongodb://localhost:27017/${DB}`)
+start = async () => {
+    await mongoose.connect(`mongodb://localhost:27017/${DB}`)
+}
+
+start();
 
 
 const saladSchema = new Schema({
@@ -22,10 +26,18 @@ const saladSchema = new Schema({
     expired: {
         type: Date,
         required: true,
-        validate: {
-            validator: (value) => value >= new Date() //Перевірка терміну придатності
-            }
+       validate: {
+            validator: (value) => {
+                if (value >= new Date()) {
+                    // Перевірка терміну придатності
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            message: 'Salad is expired'
         }
+    }
 })
 
 const Salad = mongoose.model('Salad', saladSchema);
