@@ -56,7 +56,7 @@ waight - double (вказувати дробні числа)
 ingredients - array
 sause - string
 dietType - string
-spicy - boolean
+spicy - booleanC
 expired_date - date
  
  */
