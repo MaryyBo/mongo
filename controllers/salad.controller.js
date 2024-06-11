@@ -2,9 +2,9 @@ const { Salad } = require('../models/index')
 
 module.exports.createSalad = async (req, res, next) => {
     try {
-        const { body } = req;
+        const { body, ingredients } = req;
 
-        const salad = await Salad.create(body)
+        const salad = await Salad.create({ ...body, ingredients })
         return res.status(201).send(salad)
     } catch (error) {
         next(error)
@@ -16,10 +16,10 @@ module.exports.createSalad = async (req, res, next) => {
 module.exports.getAllSalads = async (req, res, next) => {
     try {
 
-        const allSalads = await Salad.find({})
-       
-            return res.status(200).send(allSalads)
-        
+        const allSalads = await Salad.find({}).populate('ingredients')
+
+        return res.status(200).send(allSalads)
+
 
     } catch (error) {
         next(error)
@@ -31,7 +31,7 @@ module.exports.getSalad = async (req, res, next) => {
     try {
         const { params: { saladId } } = req;
 
-        const salad = await Salad.findById(saladId)
+        const salad = await Salad.findById(saladId).populate('ingredients')
         if (!salad) {
             return res.status(400).send('There is no salad')
         } else {
@@ -48,9 +48,9 @@ module.exports.updateSalad = async (req, res, next) => {
     try {
         const { body, params: { saladId } } = req;
 
-        const updatedSalad = await Salad.findByIdAndUpdate(saladId, body, {returnDocument: 'after'})
+        const updatedSalad = await Salad.findByIdAndUpdate(saladId, body, { returnDocument: 'after' })
 
-            return res.status(200).send(updatedSalad)
+        return res.status(200).send(updatedSalad)
 
     } catch (error) {
         next(error)

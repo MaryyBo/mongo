@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { Schema } = require('mongoose')
+const Salad = require ('./Salad')
+const Ingredient = require ('./Ingredient')
 
 const DB = process.env.DB_NAME || 'fe-test'
 
@@ -10,41 +11,8 @@ start = async () => {
 start();
 
 
-const saladSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    weight: Number,
-    ingredients: {
-        type: Array,
-        required: true
-    },
-    sause: String,
-    dietType: String,
-    spicy: Boolean,
-    expired: {
-        type: Date,
-        required: true,
-       validate: {
-            validator: (value) => {
-                if (value >= new Date()) {
-                    // Перевірка терміну придатності
-                    return true;
-                } else {
-                    return false;
-                }
-            },
-            message: 'Salad is expired'
-        }
-    }
-})
-
-const Salad = mongoose.model('Salad', saladSchema);
-
-
 module.exports = {
-    Salad
+    Salad, Ingredient
 }
 
 
@@ -60,4 +28,36 @@ spicy - booleanC
 expired_date - date
  
  */
+
+/*
+
+Салат 1 
+Інгредієнт: ['яйця', 'горох'.....]
+
+Салат 2 
+Інгредієнт: ['яйця', 'капуста'.....]
+
+Салат 3 
+Інгредієнт: ['яйця', 'морква'.....]
+
+
+---------------------------------------
+
+окрема колекція Інгредієнтів
+
+Інгредієнт 1
+Інгредієнт 2
+Інгредієнт 3
+Інгредієнт 4
+Інгредієнт 5
+
+окрема колекція Салатів
+
+Салат 1: [...посилаємось на якість інгредієнти з колекції інгредієнтів]
+Салат 2: [...посилаємось на якість інгредієнти з колекції інгредієнтів]
+Салат 3: [...посилаємось на якість інгредієнти з колекції інгредієнтів]
+
+
+
+*/
 
